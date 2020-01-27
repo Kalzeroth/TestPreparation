@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import bruno.cci.testpreparation.R
 import bruno.cci.testpreparation.TripClickedCallback
 import bruno.cci.testpreparation.ui.activities.TripActivity
-import bruno.cci.testpreparation.ui.adapters.TripAdapter
-import bruno.cci.testpreparation.ui.models.Trip
+import bruno.cci.testpreparation.adapters.TripAdapter
+import bruno.cci.testpreparation.models.Trip
+import bruno.cci.testpreparation.ui.activities.MainActivity
+import com.vicpin.krealmextensions.queryAll
 import kotlinx.android.synthetic.main.fragment_home.*
 
 class HomeFragment : Fragment() {
@@ -44,42 +46,27 @@ class HomeFragment : Fragment() {
              * @see TripAdapter pour un adapter avec un callback permettant de contrôler le click depuis le fragment.
              */
             layoutManager = LinearLayoutManager(context)
+            refreshList()
+        }
+    }
 
-            /** On peut écrire le dernier argument d'une fonction ou d'un constructeur comme ci dessous, donc entre {} (en bloc) si il s'agit d'un callback/fonction/lambda (les trois sont la même chose)
-             *
-             * Ici le dernier argument attendu dans le TripAdapter est un TripClickedCallback défini dans le fichier utils comme ceci :
-             * typealias TripClickedCallback = (Trip) -> Unit
-             * @see TripClickedCallback
-             * La fonction qu'on va définir et qui sera utilisé dans l'adapter devra donc être appelé avec un Trip en paramètre, qu'on peut voir répercuté ci dessous : tripClicked ->
+    /** On peut écrire le dernier argument d'une fonction ou d'un constructeur comme ci dessous, donc entre {} (en bloc) si il s'agit d'un callback/fonction/lambda (les trois sont la même chose)
+     *
+     * Ici le dernier argument attendu dans le TripAdapter est un TripClickedCallback défini dans le fichier utils comme ceci :
+     * typealias TripClickedCallback = (Trip) -> Unit
+     * @see TripClickedCallback
+     * La fonction qu'on va définir et qui sera utilisé dans l'adapter devra donc être appelé avec un Trip en paramètre, qu'on peut voir répercuté ci dessous : tripClicked ->
+     */
+    fun refreshList() {
+        _tripRecyclerView.adapter = TripAdapter(
+            Trip().queryAll()
+        ) { tripClicked ->
+
+            /**
+             * Méthode statique de l'activité TripActivity pour l'ouvrir et afficher le détail d'un Trip
              */
-            adapter = TripAdapter(
-                listOf(
-                    Trip(
-                        "Test 1",
-                        System.currentTimeMillis() + 100000,
-                        System.currentTimeMillis() + 500000,
-                        "Colmar"
-                    ),
-                    Trip(
-                        "Test 2",
-                        System.currentTimeMillis() + 200000,
-                        System.currentTimeMillis() + 800000,
-                        "Strasbourg"
-                    ),
-                    Trip(
-                        "Test 3",
-                        System.currentTimeMillis() + 600000,
-                        System.currentTimeMillis() + 1000000,
-                        "Mulhouse"
-                    )
-                )
-            ) { tripClicked ->
-
-                /**
-                 * Méthode statique de l'activité TripActivity pour l'ouvrir et afficher le détail d'un Trip
-                 */
-                TripActivity.start(context, tripClicked)
-            }
+            if (activity != null)
+                TripActivity.start((activity!! as MainActivity), tripClicked)
         }
     }
 }

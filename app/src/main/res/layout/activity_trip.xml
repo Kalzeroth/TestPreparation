@@ -31,4 +31,12 @@
         android:gravity="center"
         android:textSize="22sp" />
 
+    <ImageView
+        android:id="@+id/_favoriteButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:tint="#BB8030"
+        android:src="@drawable/ic_favorite_border_black_24dp" />
+
 </LinearLayout>

@@ -1,11 +1,16 @@
 package bruno.cci.testpreparation.ui.activities
 
-import android.content.Context
+import android.app.Activity
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.ImageView
 import bruno.cci.testpreparation.R
-import bruno.cci.testpreparation.ui.models.Trip
+import bruno.cci.testpreparation.models.Trip
+import com.vicpin.krealmextensions.queryFirst
+import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.activity_trip.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -16,45 +21,34 @@ class TripActivity : AppCompatActivity() {
      * Le companion object défini les méthodes statiques (qui peuvent être appelées sans avoir d'instance de la classe)
      */
     companion object {
-        private const val EXTRA_BUNDLE = "EXTRA_BUNDLE"
         private const val EXTRA_TRIP_TITLE = "EXTRA_TRIP_TITLE"
-        private const val EXTRA_TRIP_DATE_START = "EXTRA_TRIP_DATE_START"
-        private const val EXTRA_TRIP_DATE_END = "EXTRA_TRIP_DATE_END"
-        private const val EXTRA_TRIP_DESTINATION = "EXTRA_TRIP_DESTINATION"
+        const val TRIP_REQUEST_CODE = 1111
 
         /**
          * Méthode statique ouvrir cette activité et afficher le détail d'un Trip
-         * Les champs du modèle Trip sont tous passés séparémment. L'autre solution est de rendre la classe Parcelable.
+         * Trip n'est pas envoyé, on envois juste la PrimaryKey défini dans le modèle, qui est unique à chaque objet.
          */
-        fun start(context: Context, trip: Trip) {
-            context.startActivity(
-                Intent(context, TripActivity::class.java).apply {
-                    putExtra(
-                        EXTRA_BUNDLE,
-                        Bundle().apply {
-                            putString(EXTRA_TRIP_TITLE, trip.title)
-                            putLong(EXTRA_TRIP_DATE_START, trip.dateStart)
-                            putLong(EXTRA_TRIP_DATE_END, trip.dateEnd)
-                            putString(EXTRA_TRIP_DESTINATION, trip.destination)
-                        }
-                    )
-                }
+        fun start(activity: Activity, trip: Trip) {
+            activity.startActivityForResult(
+                Intent(activity, TripActivity::class.java).apply {
+                    putExtra(EXTRA_TRIP_TITLE, trip.title)
+                },
+                TRIP_REQUEST_CODE
             )
         }
     }
 
     /**
-     * Méthode simple pour récupérer dans une variable un Trip recréer à partir des éléments passé en Extra.
+     * Méthode simple pour récupérer dans une variable un Trip récupérer de la base de donnée grâce à l'ID.
      */
     private val tripFromExtra by lazy {
-        intent.getBundleExtra(EXTRA_BUNDLE).let {bundle ->
-            Trip(
-                bundle.getString(EXTRA_TRIP_TITLE, ""),
-                bundle.getLong(EXTRA_TRIP_DATE_START, 0L),
-                bundle.getLong(EXTRA_TRIP_DATE_END, 0L),
-                bundle.getString(EXTRA_TRIP_DESTINATION, "")
+        Trip().queryFirst {
+            equalTo(
+                "title",
+                intent?.extras?.getString(EXTRA_TRIP_TITLE, "")
             )
         }
+            ?: Trip()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,5 +69,31 @@ class TripActivity : AppCompatActivity() {
         dateRangeString += sdf.format(tripFromExtra.dateEnd)
 
         _tripDateRangeTextView.text = dateRangeString
+
+
+        _favoriteButton.apply {
+            changeImage()
+
+            setOnClickListener {
+                tripFromExtra.apply {
+                    inFavorite = !(inFavorite ?: false)
+                    changeImage()
+                    save()
+                }
+            }
+        }
+    }
+
+    /**
+     * Donne la bonne image et la bonne couleur au coeur pour mettre en favoris selon l'état actuel.
+     */
+    private fun ImageView.changeImage() {
+        imageTintList = if (tripFromExtra.inFavorite == true) {
+            setImageResource(R.drawable.ic_favorite_black_24dp)
+            ColorStateList.valueOf(Color.parseColor("#BB3030"))
+        } else {
+            setImageResource(R.drawable.ic_favorite_border_black_24dp)
+            ColorStateList.valueOf(Color.parseColor("#BB8030"))
+        }
     }
 }

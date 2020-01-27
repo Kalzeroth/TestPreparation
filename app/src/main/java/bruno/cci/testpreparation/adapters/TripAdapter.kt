@@ -1,12 +1,15 @@
-package bruno.cci.testpreparation.ui.adapters
+package bruno.cci.testpreparation.adapters
 
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import bruno.cci.testpreparation.R
 import bruno.cci.testpreparation.TripClickedCallback
-import bruno.cci.testpreparation.ui.models.Trip
+import bruno.cci.testpreparation.models.Trip
+import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.list_item_trip.view.*
 
 /**
@@ -17,7 +20,10 @@ import kotlinx.android.synthetic.main.list_item_trip.view.*
  * On lui passe aussi un callback, donc une fonction qui va être exécutée lorsqu'on le souhaite.
  * Ici on va l'utilisé lorsque la vue d'un Trip est cliquée.
  */
-class TripAdapter(private val elements: List<Trip>, private val tripClickedCallback: TripClickedCallback) :
+class TripAdapter(
+    private val elements: List<Trip>,
+    private val tripClickedCallback: TripClickedCallback
+) :
     RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
 
     /**
@@ -64,13 +70,35 @@ class TripAdapter(private val elements: List<Trip>, private val tripClickedCallb
 
         /**
          * On utilise la vue "view" en paramètre de la classe qui doit içi être le layout "list_item_trip" pour y insérer les données.
-         * Ici on met "element" un String, dans la vue.
+         * Ici on met "element" un Trip, dans la vue.
          */
         fun bindView(element: Trip) {
             view._stringTextView.text = element.title
+
+            /**
+             * Donne la bonne image et la bonne couleur au coeur pour mettre en favoris selon l'état actuel.
+             */
+            view._favoriteButton.apply {
+                imageTintList = if(element.inFavorite == true) {
+                    setImageResource(R.drawable.ic_favorite_black_24dp)
+                    ColorStateList.valueOf(Color.parseColor("#BB3030"))
+                } else {
+                    setImageResource(R.drawable.ic_favorite_border_black_24dp)
+                    ColorStateList.valueOf(Color.parseColor("#BB8030"))
+                }
+
+                setOnClickListener {
+                    element.apply {
+                        inFavorite = !(inFavorite ?: false)
+                        bindView(this)
+                        save()
+                    }
+                }
+            }
             view.setOnClickListener {
                 tripClickedCallback.invoke(element)
             }
+
         }
     }
 }
