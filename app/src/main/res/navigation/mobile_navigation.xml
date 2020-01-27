@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="bruno.cci.testpreparation.ui.home.HomeFragment"
+        android:name="bruno.cci.testpreparation.ui.fragments.HomeFragment"
         android:label="@string/title_home"
         tools:layout="@layout/fragment_home" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
-        android:name="bruno.cci.testpreparation.ui.dashboard.DashboardFragment"
+        android:name="bruno.cci.testpreparation.ui.fragments.DashboardFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="bruno.cci.testpreparation.ui.notifications.NotificationsFragment"
+        android:name="bruno.cci.testpreparation.ui.fragments.NotificationsFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_notifications" />
 </navigation>

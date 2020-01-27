@@ -1,4 +1,4 @@
-package bruno.cci.testpreparation.ui.notifications
+package bruno.cci.testpreparation.ui.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater

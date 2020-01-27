@@ -1,4 +1,4 @@
-package bruno.cci.testpreparation
+package bruno.cci.testpreparation.ui.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import bruno.cci.testpreparation.R
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -20,7 +21,9 @@ class MainActivity : AppCompatActivity() {
             navController,
             AppBarConfiguration(
                 setOf(
-                    R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications
+                    R.id.navigation_home,
+                    R.id.navigation_dashboard,
+                    R.id.navigation_notifications
                 )
             )
         )
