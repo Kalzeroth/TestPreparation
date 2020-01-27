@@ -21,7 +21,8 @@ import kotlinx.android.synthetic.main.list_item_trip.view.*
  * Ici on va l'utilisé lorsque la vue d'un Trip est cliquée.
  */
 class TripAdapter(
-    private val elements: List<Trip>,
+    private val elements: MutableList<Trip>,
+    private val canRemoveFavoritesByClicking: Boolean = false,
     private val tripClickedCallback: TripClickedCallback
 ) :
     RecyclerView.Adapter<TripAdapter.TripViewHolder>() {
@@ -39,7 +40,13 @@ class TripAdapter(
             false
         ),
         tripClickedCallback
-    )
+    ) {tripToRemove ->
+        if (canRemoveFavoritesByClicking) {
+            val oldIndex = elements.indexOf(tripToRemove)
+            elements.removeAt(oldIndex)
+            notifyItemRemoved(oldIndex)
+        }
+    }
 
     /**
      * Doit représenter le nombre d'élements à afficher dans la liste
@@ -65,7 +72,8 @@ class TripAdapter(
      */
     class TripViewHolder(
         private val view: View,
-        private val tripClickedCallback: TripClickedCallback
+        private val tripClickedCallback: TripClickedCallback,
+        private val tripRemovedFromFavoriteCallback: (Trip) -> Unit
     ) : RecyclerView.ViewHolder(view) {
 
         /**
@@ -90,6 +98,7 @@ class TripAdapter(
                 setOnClickListener {
                     element.apply {
                         inFavorite = !(inFavorite ?: false)
+                        if (inFavorite != true) tripRemovedFromFavoriteCallback.invoke(this)
                         bindView(this)
                         save()
                     }

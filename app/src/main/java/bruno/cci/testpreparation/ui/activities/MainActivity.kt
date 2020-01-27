@@ -11,6 +11,7 @@ import androidx.navigation.ui.setupWithNavController
 import bruno.cci.testpreparation.R
 import bruno.cci.testpreparation.models.Trip
 import bruno.cci.testpreparation.ui.fragments.HomeFragment
+import bruno.cci.testpreparation.ui.fragments.RefreshableFragment
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import io.realm.Realm
@@ -85,21 +86,21 @@ class MainActivity : AppCompatActivity() {
     }
 
     /**
-     * Si on arrive a récupérer l'instance du fragment avec la liste, on lance la méthode refreshList présente dans le classe HomeFragment.
+     * Si on arrive a récupérer l'instance du fragment avec la liste, on lance la méthode refreshList présente dans l'interface RefreshableFragment. HomeFragment et DashboardFragment implémente la méthode.
      * Sinon, le fragment n'est probablement pas affiché et la liste sera donc créer si on y navigue, avec les dernières informations.
      */
     private fun refreshHomeFragment() {
-        getHomeFragmentIfForeground()?.refreshList()
+        getForegroundFragmentIfRefreshable()?.refreshList()
     }
 
     /**
      * On récupère les fragments dans le NavHostFragment, il n'y a que le fragment actuellement sélectionnée dans la BottomNavigationBar la plupart du temps.
-     * Si ce n'est pas un HomeFragment on renvois simplement null.
+     * Si ce n'est pas un RefreshableFragment on renvois simplement null.
      */
-    private fun getHomeFragmentIfForeground(): HomeFragment? {
+    private fun getForegroundFragmentIfRefreshable(): RefreshableFragment? {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id._navHostFragment)
         return navHostFragment?.childFragmentManager?.fragments?.firstOrNull().let {
-            if (it is HomeFragment) it else null
+            if (it is RefreshableFragment) it else null
         }
     }
 }

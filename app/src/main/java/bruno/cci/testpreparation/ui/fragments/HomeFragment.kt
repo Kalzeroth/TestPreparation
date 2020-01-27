@@ -16,7 +16,7 @@ import bruno.cci.testpreparation.ui.activities.MainActivity
 import com.vicpin.krealmextensions.queryAll
 import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment() {
+class HomeFragment : Fragment(), RefreshableFragment {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,9 +57,9 @@ class HomeFragment : Fragment() {
      * @see TripClickedCallback
      * La fonction qu'on va définir et qui sera utilisé dans l'adapter devra donc être appelé avec un Trip en paramètre, qu'on peut voir répercuté ci dessous : tripClicked ->
      */
-    fun refreshList() {
+    override fun refreshList() {
         _tripRecyclerView.adapter = TripAdapter(
-            Trip().queryAll()
+            Trip().queryAll().toMutableList()
         ) { tripClicked ->
 
             /**
