@@ -8,7 +8,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import bruno.cci.testpreparation.R
 import bruno.cci.testpreparation.TripClickedCallback
+import bruno.cci.testpreparation.TripRemovedFromFavoriteCallback
 import bruno.cci.testpreparation.models.Trip
+import bruno.cci.testpreparation.share
 import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.list_item_trip.view.*
 
@@ -40,7 +42,7 @@ class TripAdapter(
             false
         ),
         tripClickedCallback
-    ) {tripToRemove ->
+    ) { tripToRemove ->
         if (canRemoveFavoritesByClicking) {
             val oldIndex = elements.indexOf(tripToRemove)
             elements.removeAt(oldIndex)
@@ -73,7 +75,7 @@ class TripAdapter(
     class TripViewHolder(
         private val view: View,
         private val tripClickedCallback: TripClickedCallback,
-        private val tripRemovedFromFavoriteCallback: (Trip) -> Unit
+        private val tripRemovedFromFavoriteCallback: TripRemovedFromFavoriteCallback
     ) : RecyclerView.ViewHolder(view) {
 
         /**
@@ -87,7 +89,7 @@ class TripAdapter(
              * Donne la bonne image et la bonne couleur au coeur pour mettre en favoris selon l'état actuel.
              */
             view._favoriteButton.apply {
-                imageTintList = if(element.inFavorite == true) {
+                imageTintList = if (element.inFavorite == true) {
                     setImageResource(R.drawable.ic_favorite_black_24dp)
                     ColorStateList.valueOf(Color.parseColor("#BB3030"))
                 } else {
@@ -104,6 +106,11 @@ class TripAdapter(
                     }
                 }
             }
+
+            view._shareButton.setOnClickListener {
+                element.share(it.context)
+            }
+
             view.setOnClickListener {
                 tripClickedCallback.invoke(element)
             }

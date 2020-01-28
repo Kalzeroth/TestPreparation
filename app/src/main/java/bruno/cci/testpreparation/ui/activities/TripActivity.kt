@@ -8,7 +8,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ImageView
 import bruno.cci.testpreparation.R
+import bruno.cci.testpreparation.changeFavoriteImage
 import bruno.cci.testpreparation.models.Trip
+import bruno.cci.testpreparation.share
 import com.vicpin.krealmextensions.queryFirst
 import com.vicpin.krealmextensions.save
 import kotlinx.android.synthetic.main.activity_trip.*
@@ -47,8 +49,7 @@ class TripActivity : AppCompatActivity() {
                 "title",
                 intent?.extras?.getString(EXTRA_TRIP_TITLE, "")
             )
-        }
-            ?: Trip()
+        } ?: Trip()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +57,7 @@ class TripActivity : AppCompatActivity() {
         setContentView(R.layout.activity_trip)
 
         _tripTitleTextView.text = tripFromExtra.title
-        _tripDestinationTextView.text = tripFromExtra.destination
+        _tripDestinationTextView.text = tripFromExtra.destination?.name
 
 
         /**
@@ -70,30 +71,20 @@ class TripActivity : AppCompatActivity() {
 
         _tripDateRangeTextView.text = dateRangeString
 
-
         _favoriteButton.apply {
-            changeImage()
+            changeFavoriteImage(tripFromExtra)
 
             setOnClickListener {
                 tripFromExtra.apply {
                     inFavorite = !(inFavorite ?: false)
-                    changeImage()
+                    changeFavoriteImage(this)
                     save()
                 }
             }
         }
-    }
 
-    /**
-     * Donne la bonne image et la bonne couleur au coeur pour mettre en favoris selon l'état actuel.
-     */
-    private fun ImageView.changeImage() {
-        imageTintList = if (tripFromExtra.inFavorite == true) {
-            setImageResource(R.drawable.ic_favorite_black_24dp)
-            ColorStateList.valueOf(Color.parseColor("#BB3030"))
-        } else {
-            setImageResource(R.drawable.ic_favorite_border_black_24dp)
-            ColorStateList.valueOf(Color.parseColor("#BB8030"))
+        _shareButton.setOnClickListener {
+            tripFromExtra.share(it.context)
         }
     }
 }

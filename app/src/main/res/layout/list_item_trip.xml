@@ -3,7 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="4dp"
-    android:background="#30909090"
+    android:id="@+id/_listItemRoot"
+    android:focusable="true"
+    android:clickable="true"
+    android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
 
     <TextView
@@ -16,6 +19,9 @@
         android:textSize="18sp" />
 
     <ImageView
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
         android:id="@+id/_favoriteButton"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -23,5 +29,16 @@
         android:paddingEnd="16dp"
         android:tint="#BB8030"
         android:src="@drawable/ic_favorite_border_black_24dp" />
+
+    <ImageView
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/_shareButton"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:src="@drawable/ic_share_black_24dp" />
 
 </LinearLayout>

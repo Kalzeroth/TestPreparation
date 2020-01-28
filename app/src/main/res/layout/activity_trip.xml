@@ -36,7 +36,20 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:layout_margin="16dp"
-        android:tint="#BB8030"
-        android:src="@drawable/ic_favorite_border_black_24dp" />
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_favorite_border_black_24dp"
+        android:tint="#BB8030" />
+
+    <ImageView
+        android:id="@+id/_shareButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_margin="16dp"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:src="@drawable/ic_share_black_24dp" />
 
 </LinearLayout>

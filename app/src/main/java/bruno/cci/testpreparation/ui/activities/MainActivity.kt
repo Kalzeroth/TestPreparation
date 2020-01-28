@@ -9,6 +9,7 @@ import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import bruno.cci.testpreparation.R
+import bruno.cci.testpreparation.models.Destination
 import bruno.cci.testpreparation.models.Trip
 import bruno.cci.testpreparation.ui.fragments.HomeFragment
 import bruno.cci.testpreparation.ui.fragments.RefreshableFragment
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         /**
          * S'il n'y a pas de Trip dans la base de données on y insère nos données de test.
          */
+
         Trip().queryFirst().let {
             if (it == null) {
                 listOf(
@@ -38,19 +40,31 @@ class MainActivity : AppCompatActivity() {
                         title = "Test 1"
                         dateStart = System.currentTimeMillis() + 100000
                         dateEnd = System.currentTimeMillis() + 500000
-                        destination = "Colmar"
+                        destination = Destination().apply {
+                            name = "Colmar"
+                            latitude = 48.079357
+                            longitude = 7.358512
+                        }
                     },
                     Trip().apply {
                         title = "Test 2"
                         dateStart = System.currentTimeMillis() + 200000
                         dateEnd = System.currentTimeMillis() + 800000
-                        destination = "Strasbourg"
+                        destination = Destination().apply {
+                            name = "Strasbourg"
+                            latitude = 48.583478
+                            longitude = 7.753927
+                        }
                     },
                     Trip().apply {
                         title = "Test 3"
                         dateStart = System.currentTimeMillis() + 600000
                         dateEnd = System.currentTimeMillis() + 1000000
-                        destination = "Mulhouse"
+                        destination = Destination().apply {
+                            name = "Mulhouse"
+                            latitude = 47.761080
+                            longitude = 7.333606
+                        }
                     }
                 ).forEach {
                     it.save()

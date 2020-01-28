@@ -8,6 +8,11 @@ open class Trip: RealmObject() {
     var title: String? = null
     var dateStart: Long? = null
     var dateEnd: Long? = null
-    var destination: String? = null
+    var destination: Destination? = null
     var inFavorite: Boolean? = false
+
+    override fun toString(): String {
+        return "Trip(title=$title, dateStart=$dateStart, dateEnd=$dateEnd, destination=$destination, inFavorite=$inFavorite)"
+    }
 }
+
