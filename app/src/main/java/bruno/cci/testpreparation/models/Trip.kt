@@ -1,5 +1,6 @@
 package bruno.cci.testpreparation.models
 
+import com.vicpin.krealmextensions.AutoIncrementPK
 import io.realm.RealmObject
 import io.realm.annotations.PrimaryKey
 
@@ -16,3 +17,22 @@ open class Trip: RealmObject() {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
+open class Game: RealmObject() {
+    @PrimaryKey
+    var id: Int? = null
+    var dateSortie: Long? = null
+    var titre: Long? = null
+    var editeur: String? = null
+    var multijoueur: Boolean? = false
+}

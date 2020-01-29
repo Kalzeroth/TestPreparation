@@ -32,7 +32,6 @@ class MainActivity : AppCompatActivity() {
         /**
          * S'il n'y a pas de Trip dans la base de données on y insère nos données de test.
          */
-
         Trip().queryFirst().let {
             if (it == null) {
                 listOf(
